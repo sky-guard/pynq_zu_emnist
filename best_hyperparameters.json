@@ -1,0 +1,7 @@
+{
+  "conv1_filters": 16,
+  "conv2_filters": 32,
+  "dense_units": 16,
+  "learning_rate": 0.0032193488652549895,
+  "weight_decay": 0.0009119509070854149
+}

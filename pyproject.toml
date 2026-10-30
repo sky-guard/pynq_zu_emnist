@@ -1,0 +1,30 @@
+[project]
+name = "hls4ml-pynq-zu-emnist"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "sky", email = "198247895+sky-guard@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "brevitas>=0.13.4",
+    "hls4ml[da,onnx,profiling]>=1.3.0",
+    "ipykernel>=7.4.0",
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.4",
+    "onnx>=1.23.2",
+    "onnxoptimizer>=0.4.2",
+    "optuna>=5.0.0",
+    "pandas>=3.1.0",
+    "qonnx>=1.0.0",
+    "torch>=2.15.0",
+    "torchvision>=0.29.2",
+]
+
+[project.scripts]
+hls4ml-pynq-zu-emnist = "hls4ml_pynq_zu_emnist:main"
+
+[build-system]
+requires = ["uv_build>=0.13.4,<0.14.0"]
+build-backend = "uv_build"
