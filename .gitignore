@@ -1,4 +1,4 @@
-# Python-generated files
+# Python-generated Files
 __pycache__/
 *.py[oc]
 build/
@@ -6,8 +6,17 @@ dist/
 wheels/
 *.egg-info
 
-# Virtual environments
+# Virtual Environments
 .venv
 
 # EMNIST Dataset
 data
+
+# Vitis HLS & Vivado Generated Directories
+*_prj/
+.Xil/
+vivado_*.log
+vivado_*.jou
+vitis_hls.log
+*.log
+*.jou

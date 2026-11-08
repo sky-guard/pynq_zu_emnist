@@ -19,11 +19,11 @@ void PYNQ_ZU_EMNIST(
 #ifndef __SYNTHESIS__
     static bool loaded_weights = false;
     if (!loaded_weights) {
-        nnet::load_weights_from_txt<weight79_t, 144>(w79, "w79.txt");
-        nnet::load_weights_from_txt<bias79_t, 16>(b79, "b79.txt");
-        nnet::load_weights_from_txt<weight80_t, 4608>(w80, "w80.txt");
-        nnet::load_weights_from_txt<bias80_t, 32>(b80, "b80.txt");
-        nnet::load_weights_from_txt<weight77_t, 25088>(w77, "w77.txt");
+        nnet::load_weights_from_txt<weight79_t, 72>(w79, "w79.txt");
+        nnet::load_weights_from_txt<bias79_t, 8>(b79, "b79.txt");
+        nnet::load_weights_from_txt<weight80_t, 288>(w80, "w80.txt");
+        nnet::load_weights_from_txt<bias80_t, 4>(b80, "b80.txt");
+        nnet::load_weights_from_txt<weight77_t, 3136>(w77, "w77.txt");
         nnet::load_weights_from_txt<bias77_t, 16>(b77, "b77.txt");
         nnet::load_weights_from_txt<weight78_t, 416>(w78, "w78.txt");
         nnet::load_weights_from_txt<bias78_t, 26>(b78, "b78.txt");
@@ -38,22 +38,22 @@ void PYNQ_ZU_EMNIST(
     layer71_t layer71_out[28*28*1];
     #pragma HLS ARRAY_PARTITION variable=layer71_out complete dim=0
 
-    Conv2D_Conv_0_result_t layer79_out[28*28*16];
+    Conv2D_Conv_0_result_t layer79_out[28*28*8];
     #pragma HLS ARRAY_PARTITION variable=layer79_out complete dim=0
 
-    layer57_t layer57_out[28*28*16];
+    layer57_t layer57_out[28*28*8];
     #pragma HLS ARRAY_PARTITION variable=layer57_out complete dim=0
 
-    layer59_t layer59_out[14*14*16];
+    layer59_t layer59_out[14*14*8];
     #pragma HLS ARRAY_PARTITION variable=layer59_out complete dim=0
 
-    Conv2D_Conv_1_result_t layer80_out[14*14*32];
+    Conv2D_Conv_1_result_t layer80_out[14*14*4];
     #pragma HLS ARRAY_PARTITION variable=layer80_out complete dim=0
 
-    layer61_t layer61_out[14*14*32];
+    layer61_t layer61_out[14*14*4];
     #pragma HLS ARRAY_PARTITION variable=layer61_out complete dim=0
 
-    layer63_t layer63_out[7*7*32];
+    layer63_t layer63_out[7*7*4];
     #pragma HLS ARRAY_PARTITION variable=layer63_out complete dim=0
 
     auto& layer64_out = layer63_out;

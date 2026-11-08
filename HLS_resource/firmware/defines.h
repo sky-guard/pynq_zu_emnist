@@ -14,36 +14,39 @@
 // hls-fpga-machine-learning insert numbers
 
 // hls-fpga-machine-learning insert layer-precision
-typedef ap_fixed<16,6> input_t;
-typedef ap_ufixed<8,1,AP_RND_CONV,AP_SAT,0> layer71_t;
+typedef nnet::array<ap_fixed<16,6>, 28*1> input_t;
+typedef nnet::array<ap_fixed<16,6>, 1*1> layer54_t;
+typedef nnet::array<ap_ufixed<8,2,AP_RND_CONV,AP_SAT,0>, 1*1> layer71_t;
 typedef ap_fixed<18,8> Quant_8_act_table_t;
-typedef ap_fixed<21,8> Conv2D_Conv_0_accum_t;
-typedef ap_fixed<21,8> Conv2D_Conv_0_result_t;
+typedef nnet::array<ap_ufixed<8,2,AP_RND_CONV,AP_SAT,0>, 1*1> layer81_t;
+typedef ap_fixed<21,9> Conv2D_Conv_0_accum_t;
+typedef nnet::array<ap_fixed<21,9>, 8*1> Conv2D_Conv_0_result_t;
 typedef ap_fixed<8,2,AP_RND_CONV,AP_SAT_SYM,0> weight79_t;
-typedef ap_fixed<8,0,AP_RND_CONV,AP_SAT,0> bias79_t;
-typedef ap_ufixed<8,2,AP_RND_CONV,AP_SAT,0> layer57_t;
+typedef ap_fixed<8,-1,AP_RND_CONV,AP_SAT,0> bias79_t;
+typedef nnet::array<ap_ufixed<8,1,AP_RND_CONV,AP_SAT,0>, 8*1> layer57_t;
 typedef ap_fixed<18,8> Relu_0_table_t;
-typedef ap_ufixed<8,2,AP_RND_CONV,AP_SAT,0> MaxPool_0_accum_t;
-typedef ap_ufixed<8,2,AP_RND_CONV,AP_SAT,0> layer59_t;
-typedef ap_fixed<25,13> Conv2D_Conv_1_accum_t;
-typedef ap_fixed<25,13> Conv2D_Conv_1_result_t;
-typedef ap_fixed<8,2,AP_RND_CONV,AP_SAT_SYM,0> weight80_t;
+typedef ap_ufixed<8,1,AP_RND_CONV,AP_SAT,0> MaxPool_0_accum_t;
+typedef nnet::array<ap_ufixed<8,1,AP_RND_CONV,AP_SAT,0>, 8*1> layer59_t;
+typedef nnet::array<ap_ufixed<8,1,AP_RND_CONV,AP_SAT,0>, 8*1> layer82_t;
+typedef ap_fixed<24,10> Conv2D_Conv_1_accum_t;
+typedef nnet::array<ap_fixed<24,10>, 4*1> Conv2D_Conv_1_result_t;
+typedef ap_fixed<8,1,AP_RND_CONV,AP_SAT_SYM,0> weight80_t;
 typedef ap_fixed<8,0,AP_RND_CONV,AP_SAT,0> bias80_t;
-typedef ap_ufixed<8,3,AP_RND_CONV,AP_SAT,0> layer61_t;
+typedef nnet::array<ap_ufixed<8,2,AP_RND_CONV,AP_SAT,0>, 4*1> layer61_t;
 typedef ap_fixed<18,8> Relu_1_table_t;
-typedef ap_ufixed<8,3,AP_RND_CONV,AP_SAT,0> MaxPool_1_accum_t;
-typedef ap_ufixed<8,3,AP_RND_CONV,AP_SAT,0> layer63_t;
-typedef ap_fixed<28,17> Dense_MatMul_0_accum_t;
-typedef ap_fixed<28,17> Dense_MatMul_0_result_t;
+typedef ap_ufixed<8,2,AP_RND_CONV,AP_SAT,0> MaxPool_1_accum_t;
+typedef nnet::array<ap_ufixed<8,2,AP_RND_CONV,AP_SAT,0>, 4*1> layer63_t;
+typedef ap_fixed<25,13> Dense_MatMul_0_accum_t;
+typedef nnet::array<ap_fixed<25,13>, 16*1> Dense_MatMul_0_result_t;
 typedef ap_fixed<8,2,AP_RND_CONV,AP_SAT_SYM,0> weight77_t;
-typedef ap_fixed<8,1,AP_RND_CONV,AP_SAT,0> bias77_t;
+typedef ap_fixed<8,4,AP_RND_CONV,AP_SAT,0> bias77_t;
 typedef ap_uint<1> layer77_index;
-typedef ap_ufixed<8,6,AP_RND_CONV,AP_SAT,0> layer67_t;
+typedef nnet::array<ap_ufixed<8,5,AP_RND_CONV,AP_SAT,0>, 16*1> layer67_t;
 typedef ap_fixed<18,8> Relu_2_table_t;
 typedef ap_fixed<21,12> Dense_MatMul_1_accum_t;
-typedef ap_fixed<21,12> result_t;
-typedef ap_fixed<8,1,AP_RND_CONV,AP_SAT_SYM,0> weight78_t;
-typedef ap_fixed<8,2,AP_RND_CONV,AP_SAT,0> bias78_t;
+typedef nnet::array<ap_fixed<21,12>, 26*1> result_t;
+typedef ap_fixed<8,2,AP_RND_CONV,AP_SAT_SYM,0> weight78_t;
+typedef ap_fixed<8,4,AP_RND_CONV,AP_SAT,0> bias78_t;
 typedef ap_uint<1> layer78_index;
 
 // hls-fpga-machine-learning insert emulator-defines

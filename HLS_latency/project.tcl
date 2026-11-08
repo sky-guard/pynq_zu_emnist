@@ -3,7 +3,7 @@ set project_name "PYNQ_ZU_EMNIST"
 variable backend
 set backend "vitis"
 variable part
-set part "xczu5eg-1sfvc784-1-e"
+set part "xczu5eg-sfvc784-1-e"
 variable clock_period
 set clock_period 5
 variable clock_uncertainty

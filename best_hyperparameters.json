@@ -1,7 +1,7 @@
 {
-  "conv1_filters": 16,
-  "conv2_filters": 32,
+  "conv1_filters": 8,
+  "conv2_filters": 4,
   "dense_units": 16,
-  "learning_rate": 0.0032193488652549895,
-  "weight_decay": 0.0009119509070854149
+  "learning_rate": 0.012379108594160101,
+  "weight_decay": 0.0008232000113521334
 }

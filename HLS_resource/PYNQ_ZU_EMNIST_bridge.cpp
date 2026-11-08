@@ -55,10 +55,10 @@ void PYNQ_ZU_EMNIST_float(
     float *layer78_out
 ) {
 
-    input_t global_in_ap[28*28*1];
-    nnet::convert_data<float, input_t, 28*28*1>(global_in, global_in_ap);
+    hls::stream<input_t> global_in_ap("global_in");
+    nnet::convert_data<float, input_t, 1*28*28>(global_in, global_in_ap);
 
-    result_t layer78_out_ap[26];
+    hls::stream<result_t> layer78_out_ap("layer78_out");
 
     PYNQ_ZU_EMNIST(global_in_ap,layer78_out_ap);
 
@@ -70,10 +70,10 @@ void PYNQ_ZU_EMNIST_double(
     double *layer78_out
 ) {
 
-    input_t global_in_ap[28*28*1];
-    nnet::convert_data<double, input_t, 28*28*1>(global_in, global_in_ap);
+    hls::stream<input_t> global_in_ap("global_in");
+    nnet::convert_data<double, input_t, 1*28*28>(global_in, global_in_ap);
 
-    result_t layer78_out_ap[26];
+    hls::stream<result_t> layer78_out_ap("layer78_out");
 
     PYNQ_ZU_EMNIST(global_in_ap,layer78_out_ap);
 

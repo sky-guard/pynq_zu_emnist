@@ -59,9 +59,9 @@ int main(int argc, char **argv) {
             }
 
             // hls-fpga-machine-learning insert data
-      input_t global_in[28*28*1];
-      nnet::copy_data<float, input_t, 0, 28*28*1>(in, global_in);
-      result_t layer78_out[26];
+      hls::stream<input_t> global_in("global_in");
+      nnet::copy_data<float, input_t, 0, 1*28*28>(in, global_in);
+      hls::stream<result_t> layer78_out("layer78_out");
 
             // hls-fpga-machine-learning insert top-level-function
             PYNQ_ZU_EMNIST(global_in,layer78_out);
@@ -89,9 +89,9 @@ int main(int argc, char **argv) {
         const unsigned NUM_TEST_SAMPLES = 5;
         for (unsigned i = 0; i < NUM_TEST_SAMPLES; i++) {
             // hls-fpga-machine-learning insert zero
-            input_t global_in[28*28*1];
-            nnet::fill_zero<input_t, 28*28*1>(global_in);
-            result_t layer78_out[26];
+            hls::stream<input_t> global_in("global_in");
+            nnet::fill_zero<input_t, 1*28*28>(global_in);
+            hls::stream<result_t> layer78_out("layer78_out");
 
             // hls-fpga-machine-learning insert top-level-function
             PYNQ_ZU_EMNIST(global_in,layer78_out);
