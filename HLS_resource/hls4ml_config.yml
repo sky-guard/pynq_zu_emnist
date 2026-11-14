@@ -395,7 +395,7 @@ OutputShapes:
   - 26
 Part: xczu5eg-sfvc784-1-e
 ProjectName: PYNQ_ZU_EMNIST
-Stamp: 3e462861
+Stamp: 9aac29b5
 Version: 1.0.0
 WriterConfig:
   Namespace: null

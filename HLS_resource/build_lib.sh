@@ -19,7 +19,7 @@ fi
 LDFLAGS=
 INCFLAGS="-Ifirmware/ap_types/"
 PROJECT=PYNQ_ZU_EMNIST
-LIB_STAMP=3e462861
+LIB_STAMP=9aac29b5
 BASEDIR="$(cd "$(dirname "$0")" && pwd)"
 WEIGHTS_DIR="\"${BASEDIR}/firmware/weights\""
 
