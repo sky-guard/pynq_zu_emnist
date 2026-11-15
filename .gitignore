@@ -14,6 +14,13 @@ data
 
 # Vitis HLS & Vivado Generated Directories
 *_prj/
+*.cache/
+*.gen/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.srcs/
+*.xpr
 .Xil/
 vivado_*.log
 vivado_*.jou
