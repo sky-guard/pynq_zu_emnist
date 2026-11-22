@@ -23,9 +23,10 @@ create_bd_design "system"
 set zynq_ps [create_bd_cell -type ip -vlnv xilinx.com:ip:zynq_ultra_ps_e zynq_ultra_ps_e_0]
 apply_bd_automation -rule xilinx.com:bd_rule:zynq_ultra_ps_e -config {apply_board_preset "1"} $zynq_ps
 
-# Enable HP0 and disable unused Master GP1
+# FIX 1: Explicitly enable S_AXI_HP0_FPD (128-bit) and disable unused Master GP1
 set_property -dict [list \
     CONFIG.PSU__USE__S_AXI_GP2 {1} \
+    CONFIG.PSU__SAXIGP2__DATA_WIDTH {128} \
     CONFIG.PSU__USE__M_AXI_GP1 {0} \
 ] $zynq_ps
 
@@ -34,12 +35,15 @@ set rst_gen [create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset rst_ps8_
 connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_clk0] [get_bd_pins rst_ps8_0_99M/slowest_sync_clk]
 connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_resetn0] [get_bd_pins rst_ps8_0_99M/ext_reset_in]
 
-# 6. Instantiate AXI DMA IP 
+# 6. Instantiate AXI DMA IP
 set axi_dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma axi_dma_0]
 set_property -dict [list \
     CONFIG.c_include_sg {0} \
     CONFIG.c_m_axis_mm2s_tdata_width {512} \
     CONFIG.c_s_axis_s2mm_tdata_width {1024} \
+    CONFIG.c_m_axi_mm2s_data_width {512} \
+    CONFIG.c_m_axi_s2mm_data_width {1024} \
+    CONFIG.c_sg_length_width {23} \
 ] $axi_dma
 
 # 7. Instantiate HLS IP Core
@@ -49,7 +53,6 @@ set hls_ip [create_bd_cell -type ip -vlnv xilinx.com:hls:PYNQ_ZU_EMNIST PYNQ_ZU_
 set axis_subset_in [create_bd_cell -type ip -vlnv xilinx.com:ip:axis_subset_converter axis_subset_in_0]
 set axis_subset_out [create_bd_cell -type ip -vlnv xilinx.com:ip:axis_subset_converter axis_subset_out_0]
 
-# Configure subset converters to map data streams cleanly
 # Input side: DMA (512-bit / 64 bytes) to HLS input (448-bit / 56 bytes)
 set_property CONFIG.M_TDATA_NUM_BYTES {56} $axis_subset_in
 set_property CONFIG.S_TDATA_NUM_BYTES {64} $axis_subset_in
@@ -79,14 +82,24 @@ apply_bd_automation -rule xilinx.com:bd_rule:axi4 -config { \
     master_apm {0} \
 } [get_bd_intf_pins axi_dma_0/S_AXI_LITE]
 
-# 11. Connect both DMA Memory-Mapped ports to Zynq HP0 via an AXI SmartConnect
-set smartconnect_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:smartconnect smartconnect_0]
-set_property CONFIG.NUM_SI {2} $smartconnect_0
-set_property CONFIG.NUM_MI {1} $smartconnect_0
+# 11. Connect both DMA Memory-Mapped ports to Zynq HP0 via Block Automation
+apply_bd_automation -rule xilinx.com:bd_rule:axi4 -config { \
+    Clk_auto {Auto} \
+    Master {/axi_dma_0/M_AXI_MM2S} \
+    Slave {/zynq_ultra_ps_e_0/S_AXI_HP0_FPD} \
+    ddr_seg {Auto} \
+    intc_ip {New AXI SmartConnect} \
+    master_apm {0} \
+} [get_bd_intf_pins zynq_ultra_ps_e_0/S_AXI_HP0_FPD]
 
-connect_bd_intf_net [get_bd_intf_pins axi_dma_0/M_AXI_MM2S] [get_bd_intf_pins smartconnect_0/S00_AXI]
-connect_bd_intf_net [get_bd_intf_pins axi_dma_0/M_AXI_S2MM] [get_bd_intf_pins smartconnect_0/S01_AXI]
-connect_bd_intf_net [get_bd_intf_pins smartconnect_0/M00_AXI] [get_bd_intf_pins zynq_ultra_ps_e_0/S_AXI_HP0_FPD]
+apply_bd_automation -rule xilinx.com:bd_rule:axi4 -config { \
+    Clk_auto {Auto} \
+    Master {/axi_dma_0/M_AXI_S2MM} \
+    Slave {/zynq_ultra_ps_e_0/S_AXI_HP0_FPD} \
+    ddr_seg {Auto} \
+    intc_ip {/axi_smc} \
+    master_apm {0} \
+} [get_bd_intf_pins axi_dma_0/M_AXI_S2MM]
 
 # 12. Connect Clocks, Resets, and Control Signals
 connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_clk0] [get_bd_pins PYNQ_ZU_EMNIST_0/ap_clk]
@@ -97,14 +110,7 @@ set xlconstant_0 [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant xlconst
 set_property -dict [list CONFIG.CONST_VAL {1} CONFIG.CONST_WIDTH {1}] $xlconstant_0
 connect_bd_net [get_bd_pins xlconstant_0/dout] [get_bd_pins PYNQ_ZU_EMNIST_0/ap_start]
 
-# Connect clocks & resets for subset converters, HP0, SmartConnect, and DMA
-connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_clk0] [get_bd_pins zynq_ultra_ps_e_0/saxihp0_fpd_aclk]
-connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_clk0] [get_bd_pins smartconnect_0/aclk]
-connect_bd_net [get_bd_pins rst_ps8_0_99M/peripheral_aresetn] [get_bd_pins smartconnect_0/aresetn]
-
-connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_clk0] [get_bd_pins axi_dma_0/m_axi_mm2s_aclk]
-connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_clk0] [get_bd_pins axi_dma_0/m_axi_s2mm_aclk]
-
+# Connect clocks & resets for subset converters and DMA memory ports
 connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_clk0] [get_bd_pins axis_subset_in_0/aclk]
 connect_bd_net [get_bd_pins rst_ps8_0_99M/peripheral_aresetn] [get_bd_pins axis_subset_in_0/aresetn]
 connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/pl_clk0] [get_bd_pins axis_subset_out_0/aclk]
@@ -127,9 +133,6 @@ wait_on_run synth_1
 
 launch_runs impl_1 -to_step write_bitstream -jobs 4
 wait_on_run impl_1
-
-# 15. Export the unified XSA hardware package for PYNQ
-write_hw_platform -fixed -include_bit -force -file ./vivado_output/system_wrapper.xsa
 
 puts "INFO: Bitstream generation completed successfully!"
 exit
